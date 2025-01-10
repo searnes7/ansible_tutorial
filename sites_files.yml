@@ -5,12 +5,12 @@
   become: true
   pre_tasks:
 
-  - name: install updates (CentOS)
+  - name: install updates (Rocky)
     tags: always
     dnf:
       update_only: yes
       update_cache: yes
-    when: ansible_distribution == "CentOS"
+    when: ansible_distribution == "Rocky"
 
   - name: install updates (Ubuntu)
     apt:
@@ -28,17 +28,33 @@
         - epel-release
       state: present
         
-  - name: install apache2 package CentOS
-    tags: httpd,centos
+  - name: install apache2 package (Rocky)
+    tags: httpd,rocky
     package:
       name: 
         - httpd
         - php
       state: latest
-    when: ansible_distribution == "CentOS"
+    when: ansible_distribution == "Rocky"
+
+  - name: change email add for admin
+    tags: apache,rocky,httpd
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin somebody@somewhere.net
+    when: ansible_distribution == "Rocky"
+    register: httpd
+
+  - name: restart httpd (Rocky)
+    tags: rocky,apache,httpd
+    service:
+      name: httpd
+      state: restarted
+    when: httpd.changed
 
   - name: Copy index to webserver
-    tags: httpd,centos
+    tags: httpd,rocky
     copy:
       src: default_site.html
       dest: /var/www/html/index.html
@@ -51,6 +67,7 @@
       name: httpd
       state: started
       enabled: yes
+    when: ansible_distribution == "Rocky"
 
 - hosts: db_servers
   become: true
