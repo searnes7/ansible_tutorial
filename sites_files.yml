@@ -18,6 +18,31 @@
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
 
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create NOPASS ansible user
+    tags: always
+    user:
+      name: hammer
+      groups: root
+
+  - name: add ssh key for hammer
+    tags: always
+    authorized_key:
+      user: hammer
+      key: "sh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDHqqCX5IxNJWAITOj+asswOuNhWdE6GnRYCqqsUYXi/h6I3AH1HnSlvGo2M8ab+URLuF1aiabJjiJms8W3WvhH1vZkWwnJ9w9qZAIT8zxehtMrlnlykzxD8mtdt+tmBwUW+uA2U2ChWMg6z19ORgp6cqMYzCU0JDzrngMcsd9cQXz/yTk6BnMVf/Yg/MJsdpjaDp5eZ28WZ8IYPTgJRg/wD6F2ATQHtcONweJhsYLL/1PUTx0RlJU5NcK/j7TRGhz9NpylxF2IJnyTPVt1bSCztNxaaQ3aushBI9YpDYRtKr7dwwGhG28CCjXNAGK30uAlkeyFKa4WFGQvm+gM98NMkwtydsulEAQUMhFh5794h9vXVpzZeFJN7NJ3Lm7JNSL66MhQpPtDaM6EQykCTScYuToeiF+UN+iIgw17va5d4Rot/HpQL7PrbAA3P5G2kwA4ZgOmQ9AK3Yd4erJnSKnxvYLBLer9HHtZnP7cE/0e4lAylruTXKLtOcoSaLAuzEjyhy8WV4UVxUmkKTb01Cz+zgq0AtYNezJ/EXOfUtK4Dtq4Ny9oDPCIRqEFaO9P1Wb/zS7J+HklJG/dmxJcSoO7PNcYKBTSInmXE+ciYgeqwTGmDtknf5gF7VTsbotAH9wIFSj4GiM26IM9kuVBU9BtzeTKQyniqb/LJZ4XMq7T1Q== ansible_main"
+
+  - name: add sudoers file
+    tags: always
+    copy:
+      src: sudoer_hammer
+      dest: /etc/sudoers.d/hammer
+      owner: root
+      group: root
+      mode: 0440
+
 - hosts: web_servers
   become: true
   tasks:
