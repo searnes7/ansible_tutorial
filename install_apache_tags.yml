@@ -6,6 +6,7 @@
   pre_tasks:
 
   - name: install updates (CentOS)
+    tags: always
     dnf:
       update_only: yes
       update_cache: yes
@@ -22,6 +23,7 @@
   tasks:
 
   - name: install apache2 package CentOS
+    tags: apache,apache2,centos
     dnf:
       name: 
         - httpd
@@ -30,6 +32,7 @@
     when: ansible_distribution == "CentOS"
 
   - name: uninstall apache2 package Ubuntu
+    tags: uninstall,apache,apache2,ubuntu
     dnf:
       name: 
         - apache2
@@ -43,6 +46,7 @@
   tasks:
 
   - name: install MariaDB package Ubuntu
+    tags: ubuntu,mariadb,db
     apt:
       name:
         - mariadb-server
@@ -54,6 +58,7 @@
   tasks:
 
   - name: install samba package Ubuntu
+    tags: ubuntu,samba
     apt:
       name:
         - samba
