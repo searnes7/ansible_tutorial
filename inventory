@@ -1,6 +1,11 @@
-[linuxservers]
+[web_servers]
 192.168.86.100
 192.168.86.103
+
+[db_servers]
+192.168.86.104
+
+[file_servers]
 192.168.86.104
 
 #[win10]
