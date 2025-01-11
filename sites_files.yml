@@ -5,17 +5,18 @@
   become: true
   pre_tasks:
 
-  - name: install updates (Rocky)
+  - name: update repo cache (Rocky)
     tags: always
     dnf:
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Rocky"
 
-  - name: install updates (Ubuntu)
+  - name: update repo cache (Ubuntu)
+    tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
 
 - hosts: all
@@ -32,7 +33,7 @@
     tags: always
     authorized_key:
       user: hammer
-      key: "sh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDHqqCX5IxNJWAITOj+asswOuNhWdE6GnRYCqqsUYXi/h6I3AH1HnSlvGo2M8ab+URLuF1aiabJjiJms8W3WvhH1vZkWwnJ9w9qZAIT8zxehtMrlnlykzxD8mtdt+tmBwUW+uA2U2ChWMg6z19ORgp6cqMYzCU0JDzrngMcsd9cQXz/yTk6BnMVf/Yg/MJsdpjaDp5eZ28WZ8IYPTgJRg/wD6F2ATQHtcONweJhsYLL/1PUTx0RlJU5NcK/j7TRGhz9NpylxF2IJnyTPVt1bSCztNxaaQ3aushBI9YpDYRtKr7dwwGhG28CCjXNAGK30uAlkeyFKa4WFGQvm+gM98NMkwtydsulEAQUMhFh5794h9vXVpzZeFJN7NJ3Lm7JNSL66MhQpPtDaM6EQykCTScYuToeiF+UN+iIgw17va5d4Rot/HpQL7PrbAA3P5G2kwA4ZgOmQ9AK3Yd4erJnSKnxvYLBLer9HHtZnP7cE/0e4lAylruTXKLtOcoSaLAuzEjyhy8WV4UVxUmkKTb01Cz+zgq0AtYNezJ/EXOfUtK4Dtq4Ny9oDPCIRqEFaO9P1Wb/zS7J+HklJG/dmxJcSoO7PNcYKBTSInmXE+ciYgeqwTGmDtknf5gF7VTsbotAH9wIFSj4GiM26IM9kuVBU9BtzeTKQyniqb/LJZ4XMq7T1Q== ansible_main"
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCmvDTyqDY6DedYHX6lRzMyZ7D5a6CK73Q5tUJEO/5yTsbXWQD9e3hVbf3mfsOGjg+V5vJYu6nb1i5lK1jh3aw80jGcHkxDziVACIcNWDIFo/KJdYTkqgY2ocyoaj6D8aaD9ZI2vuazRT7fwhj7jP96+rKjQEIOzQur7zHQL+rriYDamf9zGDQnhl9N7McLBTNnTgBl9xWXtCn93KncrEBvxzlemARl8kc9Ihz0PRUQmMoxbne8ZVqxUzMfacZlN/XXllvEFlmOlpQLwNVvUSex9GgCT9g4F5m+Bie9Zgb2hEiqlCRDUqhqtsjpQLU/G1QAiTdo+3n1pSYvzwFqmtCN/x7c4X7P8QmctQStU0zc8MtGitezsvaEOyMu3UKJqRMoR/lhvt5OKn3iBPL/pu63nxhKo/RyTKVXLBZ57XvOAzux3tpIre/M+oC3uJa54mctT9S/xXhI4FAqNIuMRXKq2iYAItlOE5Fp0zz+H8IwA0s5wim2Ta4zEs71cE4Gq/KGmuEj3n65vmgX9D4WjehHdMOr4lBa2loj5hr7lWBeYd/cBpw0Ew4zB/0+xGacwVgl2zzJN4AVYFxRFDwaZ36PiVhYjzZkykSSvAVIuAx4Y4a45hH3AzoYBrgiAKxykYmHRJY00qixMUVYmWDtbsnfc7EYAPboJ7AyhxdIdbTyTw== ansible"
 
   - name: add sudoers file
     tags: always
