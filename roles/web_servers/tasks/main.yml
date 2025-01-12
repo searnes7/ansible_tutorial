@@ -1,0 +1,49 @@
+---
+
+- name: install epel-release
+  tags: epel-release
+  dnf:
+    name:
+      - epel-release
+    state: present
+        
+- name: install apache2 package (Rocky)
+  tags: httpd,rocky
+  package:
+    name: 
+      - httpd
+      - php
+    state: latest
+  when: ansible_distribution == "Rocky"
+
+- name: change email add for admin
+  tags: apache,rocky,httpd
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^ServerAdmin'
+    line: ServerAdmin somebody@somewhere.net
+  when: ansible_distribution == "Rocky"
+  register: httpd
+
+- name: restart httpd (Rocky)
+  tags: rocky,apache,httpd
+  service:
+    name: httpd
+    state: restarted
+  when: httpd.changed
+
+- name: Copy index to webserver
+  tags: httpd,rocky
+  copy:
+    src: default_site.html
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644    
+
+- name: Start Apache
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  when: ansible_distribution == "Rocky"
