@@ -21,16 +21,20 @@
   lineinfile:
     path: /etc/httpd/conf/httpd.conf
     regexp: '^ServerAdmin'
-    line: ServerAdmin somebody@somewhere.net
+    line: ServerAdmin somebody@somewhere.com
   when: ansible_distribution == "Rocky"
-  register: httpd
+### registers a change as 'httpd' and calls it in the play below as 'when'
+#  register: httpd
+### sets a handler as 'restart_apache'
+  notify: restart_apache
 
-- name: restart httpd (Rocky)
-  tags: rocky,apache,httpd
-  service:
-    name: httpd
-    state: restarted
-  when: httpd.changed
+#- name: restart httpd (Rocky)
+#  tags: rocky,apache,httpd
+#  service:
+#    name: httpd
+#    state: restarted
+### register 'httpd' is called here
+#  when: httpd.changed
 
 - name: Copy index to webserver
   tags: httpd,rocky
